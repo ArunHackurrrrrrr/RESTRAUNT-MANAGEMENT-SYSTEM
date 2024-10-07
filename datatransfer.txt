@@ -1,0 +1,5 @@
+staffAtten={'atharv singh' : { 'Contact' : '55257558','Post' : 'Pune' } 
+'anash sing' : { 
+'Contact' : '655623256',
+'Post' : 'waiter' } 
+}

@@ -1,4 +1,7 @@
 import ast
+from datetime import datetime
+
+# dict = {}
 
 def main_screen():
     print('WELCOME TO OUR SOFTWARE \n WE HAVE FOLLOWING OPTIONS YOU CAN USE \n (1) MENU MANGAEMENT \n (2) STAFF MANAGEMENT \n (3) BILLING SYSTEM \n (4) TABLE BOOKING \n (5) ORDER MANAGEMENT \n (6) INVENTORY MANGAEMENT \n (7) QUIT ')
@@ -22,25 +25,20 @@ def main_screen():
         print("PLEASE MAKE SURE TO ENTER CORRECT INPUT ")
         main_screen()
 
-def dictMaker(fileName,dictName):
-    with open(f'{fileName}.txt','r') as dictmakerOnlyR:
-        dataStored = dictmakerOnlyR.read()
-        dataDict = f"{dictName}=({dataStored})"
-        # print(dataDict)
-        # dictFromData= ast.literal_eval(dataDict)
-        dictFromData = dataDict.replace('(','{')
-        dictFromData2 = dictFromData
-        dictFromData3 = dictFromData2.replace(')','}')
-        print(dictFromData3)
+def dictMaker(fileName):
+    with open(f'{fileName}.txt','r') as dictData:
+        dictReadData = dictData.read().strip()
+        dictReadData2 = f"({dictReadData})"
+        convOne = dictReadData2.replace("(","{")
+        convTwo = convOne.replace(")","}")
+        dictReadDataConv = ast.literal_eval(convTwo)
+        print(dictReadDataConv.keys())
+        return dictReadDataConv
+    
 
-        # dictFromDataCompPro = ast.literal_eval(dictFromData3)
-        # print(dictFromDataCompPro)
-        # return dictFromDataCompPro
-
-
-def readingWriting(fileName,data):
+def readingWriting(fileName,data,modeo):
     print(data)
-    with open(f'{fileName}.txt', 'a') as readWrite:
+    with open(f'{fileName}.txt', f'{modeo}') as readWrite:
         readWrite.write(f'{data} \n')
 
 
@@ -64,31 +62,70 @@ def menuManage():
 
         readingWriting('Menu',f'{dishnew3}')
 
-
-
-
-
 def staffManage():
     print('(1) FOR ATTENDENCE OF STAFF \n(2) TO ADD A STAFF MEMBER \n(3) TO DELETE RECORD OF A MEMBER')
     userInp = int(input("ENTER YOUR CHOICE"))
     if userInp == 1:
-        storData = dictMaker('STAFF','staffAtten')
+        storData = dictMaker('STAFF')
         print(storData)
+        AttName = list(storData.keys())
+        print('ye hai attname')
+        print(AttName)
+        date = datetime.now()
+        formatted_date = date.strftime("%d-%m-%Y")
+        print(formatted_date)
+        for noAtt in range (0,len(AttName)):
+            print(f'({noAtt + 1}) {AttName[noAtt]}')
+        userInpAtt = (input('ENTER THE NO FOR ATTENDENCE in series : '))
+        userInpAttLis = (userInpAtt)
+        for no in userInpAttLis:
+            print(no)
+            no = int(no)
+            attData = f"{formatted_date} ----> {AttName[no -1]}"
+            print(f' yaha hai {attData}')
+            readingWriting('ATTENDENCE',attData,'a')
+            
+        
+        
+        
+    
     if userInp == 2 :
         userInpName = input('ENTER THE NAME OF NEW STAFF')
         userInpCont = input('ENTER THE CONTACT NO OF STAFF')
         userInpPost = input('ENTER THE ROLE OF NEW STAFF MEMBER')
-        StaffData = f"'{userInpName}' : ( \n'Contact' : '{userInpCont}',\n'Post' : '{userInpPost}' )"
+        StaffData = f"'{userInpName}' : ( \n'Contact' : '{userInpCont}',\n'Post' : '{userInpPost}' ),"
         
         StaffData = StaffData.replace('(','{')
         StaffData2 = StaffData
         staffdata3 = StaffData2.replace(')','}')
         print(staffdata3)
 
-        readingWriting('STAFF',staffdata3)
+        readingWriting('STAFF',staffdata3,'a')
     
     if userInp == 3:
-        print("working on it")
+        staffRecord = dictMaker('STAFF')
+        staffRecordLis = (staffRecord)
+        print(staffRecordLis)
+        userInpDelDataName = input('ENTER THE NAME OF THE MEMBER YOU WANT TO REMOVE : ')
+        # newStaff = staffRecord.pop(userInpDelDataName)
+        # newStaff = del staffRecord [f'userInpDelDataName']
+        del staffRecord [f'{userInpDelDataName}']
+        # newStaffRecord = f'({staffRecord})'
+
+        newStaffRecordStr = f'{staffRecord}'
+        print('ye hai len')
+        print(len(newStaffRecordStr))
+        # newStaffRecordStr2 = newStaffRecordStr.replace('{',' ')
+        # newStaffRecordStr3 = newStaffRecordStr2.replace('}',' ')
+        newStaffRecordStrData = newStaffRecordStr[:0] + newStaffRecordStr[1:]
+        newStaffRecordStrData2 = newStaffRecordStrData[:len(newStaffRecordStrData)] + newStaffRecordStrData[len(newStaffRecordStrData) -1 :]
+        # newStaffRecord2 = newStaffRecord.replace('(','{')
+        # newStaffRecord3 = newStaffRecord2.replace(')','}')
+
+        readingWriting('STAFF',newStaffRecordStrData2,'w')
+        print('ye haih naeee')
+        print(newStaffRecordStrData2)
+
 
        
 
